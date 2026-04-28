@@ -12,11 +12,31 @@ const games = [
   { id: 8, title: 'Forza Horizon 5', description: 'Corridas de tirar o fôlego no México com mais de 500 carros licenciados e um mundo aberto deslumbrante.', price: 199.90, image: 'https://picsum.photos/seed/forzah5/400/300', genre: 'Corrida', rating: 5 },
 ]
 
-function Products() {
-  return (
-    <div style={{ minHeight: 'calc(100vh - 80px)', position: 'relative', padding: '3rem 1.5rem' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+const genres = ['Todos', 'RPG', 'Ação', 'Aventura', 'Corrida']
 
+function Products() {
+  const [selectedGenre, setSelectedGenre] = useState('Todos')
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sortBy, setSortBy] = useState('default')
+
+  const filtered = games
+    .filter(g => {
+      const matchGenre = selectedGenre === 'Todos' || g.genre === selectedGenre
+      const matchSearch = g.title.toLowerCase().includes(searchTerm.toLowerCase()) || g.description.toLowerCase().includes(searchTerm.toLowerCase())
+      return matchGenre && matchSearch
+    })
+    .sort((a, b) => {
+      if (sortBy === 'price-asc') return a.price - b.price
+      if (sortBy === 'price-desc') return b.price - a.price
+      if (sortBy === 'rating') return b.rating - a.rating
+      return a.id - b.id
+    })
+
+  return (
+    <div style={{ minHeight: 'calc(100vh - 80px)', position: 'relative' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+
+        {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h1 style={{ fontFamily: 'Orbitron, monospace', fontWeight: 900, fontSize: 'clamp(2rem, 6vw, 3.5rem)', color: 'white', marginBottom: '1rem' }}>
             NOSSOS <span className="neon-text-cyan">PRODUTOS</span>
@@ -26,10 +46,63 @@ function Products() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.5rem' }}>
-          {games.map(game => <Card key={game.id} {...game} />)}
+        {/* Filtros */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+          <div style={{ position: 'relative', flex: '1 1 240px' }}>
+            <svg style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px' }} fill="none" stroke="#00f5ff" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Buscar jogo..."
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              style={{ width: '100%', paddingLeft: '2.5rem', paddingRight: '1rem', paddingTop: '0.75rem', paddingBottom: '0.75rem', backgroundColor: 'rgba(13,20,40,0.8)', border: '1px solid rgba(0,245,255,0.2)', color: 'white', fontFamily: 'Rajdhani, sans-serif', fontSize: '1rem', outline: 'none' }}
+            />
+          </div>
+          <select
+            value={sortBy}
+            onChange={e => setSortBy(e.target.value)}
+            style={{ padding: '0.75rem 1rem', backgroundColor: 'rgba(13,20,40,0.8)', border: '1px solid rgba(0,245,255,0.2)', color: '#94a3b8', fontFamily: 'Rajdhani, sans-serif', fontSize: '1rem', outline: 'none', cursor: 'pointer' }}
+          >
+            <option value="default">Ordenar: Padrão</option>
+            <option value="price-asc">Menor Preço</option>
+            <option value="price-desc">Maior Preço</option>
+            <option value="rating">Melhor Avaliado</option>
+          </select>
         </div>
 
+        {/* Gêneros */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2.5rem' }}>
+          {genres.map(g => (
+            <button
+              key={g}
+              onClick={() => setSelectedGenre(g)}
+              style={{
+                fontFamily: 'Orbitron, monospace', fontWeight: 700, fontSize: '0.65rem', letterSpacing: '0.1em',
+                textTransform: 'uppercase', padding: '0.5rem 1rem',
+                border: `1px solid ${selectedGenre === g ? '#00f5ff' : '#334155'}`,
+                color: selectedGenre === g ? '#00f5ff' : '#475569',
+                backgroundColor: selectedGenre === g ? 'rgba(0,245,255,0.1)' : 'transparent',
+                boxShadow: selectedGenre === g ? '0 0 10px rgba(0,245,255,0.3)' : 'none',
+                cursor: 'pointer', transition: 'all 0.3s ease',
+              }}
+            >
+              {g}
+            </button>
+          ))}
+        </div>
+
+        {/* Resultado */}
+        {filtered.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.5rem' }}>
+            {filtered.map(game => <Card key={game.id} {...game} />)}
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '5rem 0' }}>
+            <p style={{ fontFamily: 'Orbitron, monospace', fontWeight: 700, color: '#475569', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Nenhum jogo encontrado</p>
+          </div>
+        )}
       </div>
     </div>
   )
