@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'Orbitron', monospace;
+  --font-body: 'Rajdhani', sans-serif;
+
+  --color-neon-cyan: #00f5ff;
+  --color-neon-purple: #bf00ff;
+  --color-neon-pink: #ff006e;
+  --color-neon-green: #39ff14;
+
+  --color-dark-900: #04050a;
+  --color-dark-800: #080c18;
+  --color-dark-700: #0d1428;
+  --color-dark-600: #121b38;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #04050a;
+  color: #e0e0ff;
+  font-family: 'Rajdhani', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #04050a; }
+::-webkit-scrollbar-thumb { background: #00f5ff44; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #00f5ff99; }
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.15) 2px,
+    rgba(0,0,0,0.15) 4px
+  );
+  pointer-events: none;
+}
+
+.neon-text-cyan {
+  color: #00f5ff;
+  text-shadow: 0 0 10px #00f5ff, 0 0 20px #00f5ff55;
+}
+
+.neon-text-purple {
+  color: #bf00ff;
+  text-shadow: 0 0 10px #bf00ff, 0 0 20px #bf00ff55;
+}
+
+.neon-text-pink {
+  color: #ff006e;
+  text-shadow: 0 0 10px #ff006e, 0 0 20px #ff006e55;
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.btn-primary {
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #00f5ff;
+  color: #00f5ff;
+  background: linear-gradient(135deg, #00f5ff11, #bf00ff11);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #00f5ff, #bf00ff);
+  color: #04050a;
+  box-shadow: 0 0 20px #00f5ff, 0 0 40px #bf00ff55;
+}
+
+.nav-link {
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #7090c0;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.nav-link:hover,
+.nav-link.active {
+  color: #00f5ff;
+  text-shadow: 0 0 10px #00f5ff;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px #00f5ff33; }
+  50% { box-shadow: 0 0 25px #00f5ff, 0 0 50px #00f5ff55; }
+}
+
+.animate-flicker { animation: flicker 8s infinite; }
+.animate-float   { animation: float 4s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
